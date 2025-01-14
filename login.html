@@ -9,19 +9,19 @@
 <body>
     <div class="mainpage">
         <div class="formgroup">
-            <form id="loginForm">
+            <form id="loginForm" method="POST" action="/login">
                 <label for="email">Your email:</label>
                 <input type="text" id="email" name="email" required>
                 <br>
                 
-                <label for="password">Your password: </label>
-                <input type="text" id="password" name="password" required>
+                <label for="password">Your password:</label>
+                <input type="password" id="password" name="password" required>
                 <br>
                 
                 <button type="submit">Log in</button>
             </form>
-            <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+            <p>Don't have an account? <a href="/signup">Sign up here</a></p>
         </div>
-</div>
-
+    </div>
 </body>
+</html>
