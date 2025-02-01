@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}SweetTalk - Home{% endblock %}
+{% block content %}
+<h1>Tea Order System</h1>
+
+<div class="menu">
+    <h2>Menu</h2>
+    <div class="item">
+        <span>Green Milk Tea - $3</span>
+    </div>
+    <div class="item">
+        <span>Thai Milk Tea - $2.50</span>
+    </div>
+    <div class="item">
+        <span>Oolong Milk Tea - $4</span>
+    </div>
+</div>
+{% endblock %}
