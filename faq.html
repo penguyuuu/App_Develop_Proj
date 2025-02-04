@@ -62,3 +62,146 @@
     }
 </script>
 {% endblock %}
+
+
+
+----------if needed original file before integration is here------------------------------------------------------------------------------------------------------
+index(html): 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>FAQ Page</title>
+    <script>
+            function likeQuestion(index) {
+        fetch(`/like/${index}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                // Update the likes span and button text
+                const likeButton = document.getElementById(`like-button-${index}`);
+                const likesSpan = document.getElementById(`likes-${index}`);
+                likesSpan.innerText = data.likes;
+                likeButton.innerHTML = `Like (${data.likes})`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Frequently Asked Questions</h1>
+
+        <h2>Add a Question</h2>
+        <form method="POST">
+            <label for="question">Question:</label><br>
+            <input type="text" id="question" name="question" required><br>
+            <label for="answer">Description:</label><br>
+            <textarea id="answer" name="answer" required></textarea><br>
+            <input type="submit" value="Add">
+        </form>
+
+        <h2>Current Questions</h2>
+        <ul>
+            {% for faq in faqs %}
+            <li>
+                <strong>{{ faq.question }}</strong><br>
+                {{ faq.answer }}<br>
+                <span>Likes: <span id="likes-{{ loop.index0 }}">{{ faq.likes }}</span></span>
+                <button id="like-button-{{ loop.index0 }}" onclick="likeQuestion({{ loop.index0 }})">
+                    Like (<span id="likes-{{ loop.index0 }}">{{ faq.likes }}</span>)
+                </button>                
+                <a class="edit" href="{{ url_for('edit_question', index=loop.index0) }}">Edit</a>
+                <a class="delete" href="{{ url_for('delete_question', index=loop.index0) }}">Delete</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </main>
+</body>
+</html>
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+add question html: 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Add Question</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('add_question')}}">Add Question</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+    <script>
+        function validateForm(){
+            const question = document.getElementById('question').value;
+            const answer = document.getElementById('answer').value;
+            if (!question || !answer){
+                alert("Please fill out both the questions and description fields");
+                return false; 
+            }
+            return true;
+        }
+    </script>
+        <h1>Add Question</h1>
+        <form method="POST">
+            <label for="question">Question:</label><br>
+            <input type="text" id="question" name="question" required><br>
+            <label for="answer">description:</label><br>
+            <textarea id="answer" name="answer" required></textarea><br>
+            <input type="submit" value="Add">
+        </form>
+        <a href="{{ url_for('index') }}">Back to FAQ</a>
+    </main>
+</body>
+</html>
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+edit question html 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Edit Question</title>
+</head>
+<body>
+    <header>
+         <nav>
+            <ul>
+                <li><a href="{{ url_for('index')}}">Home</a></li>
+                <li><a href="{{ url_for('add_question')}}">Add Question</a></li>
+            </ul>
+         </nav>
+    </header>
+    <main>
+        <h1>Edit Question</h1>
+        <form method="POST">
+            <label for="question">Question:</label><br>
+            <input type="text" id="question" name="question" value="{{ faq.question }}" required>
+            <br>
+            <label for="answer">description:</label>
+            <br>
+            <textarea id="answer" name="answer" required> {{ faq.answer }}</textarea><br>
+            <input type="submit" value="Update">
+        </form>
+        <a href="{{ url_for('index') }}">Back to FAQ</a>
+    </main>    
+</body>
+</html>
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
