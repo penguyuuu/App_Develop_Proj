@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import shelve
 
@@ -20,18 +21,17 @@ def save_faqs(faqs):
         db['faqs'] = faqs
     
 @app.route('/', methods=['GET', 'POST'])
-def faq():  # Change the function name to faq
+def index():
     if request.method == 'POST':
         question = request.form['question']
         answer = request.form['answer']
         faqs = get_faqs()
         faqs.append({'question': question, 'answer': answer, 'likes': 0, 'reactions': []})
         save_faqs(faqs)
-        return redirect(url_for('faq'))  # Change to redirect to the new function name
+        return redirect(url_for('index'))
 
     faqs = get_faqs()
-    return render_template('faq.html', faqs=faqs)  # Render the faq.html template
-
+    return render_template('index.html', faqs=faqs)
 
 @app.route('/edit/<int:index>', methods=['GET', 'POST'])
 def edit_question(index):
