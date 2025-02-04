@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logged out</title>
+    <script>
+        function showAlert(message) {
+            if (message) {
+                alert(message);
+            }
+        }
+    </script>
 </head>
-<body>
+<body onload="showAlert('{{ message }}')">
     <h1>You have successfully logged out.</h1>
-    {% if message %}
-        <p>{{ message }}</p>
-    {% endif %}
     <p><a href="{{ url_for('login_home') }}">Back to home.</a></p>
 </body>
 </html>
