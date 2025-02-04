@@ -19,8 +19,8 @@ def validate_password(password):
 
 
 @app.route('/')
-def home():
-    return render_template('home.html')
+def login_home():
+    return render_template('login_home.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
