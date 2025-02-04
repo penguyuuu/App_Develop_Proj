@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const cardNumberInput = document.getElementById("card_number");
+            const expiryDateInput = document.getElementById("expiry_date");
+            const cvvInput = document.getElementById("cvv");
+            
+            cardNumberInput.addEventListener("input", function() {
+                this.value = this.value.replace(/[^0-9]/g, "").replace(/(\d{4})/g, "$1 ").trim();
+            });
+            
+            expiryDateInput.addEventListener("input", function() {
+                this.value = this.value.replace(/[^0-9]/g, "").replace(/(\d{2})(\d{0,2})/, "$1/$2");
+            });
+            
+            cvvInput.addEventListener("input", function() {
+                this.value = this.value.replace(/[^0-9]/g, "");
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Payment Page</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <a href="/paynow">Pay using PayNow</a>
+
+    <form method="POST" action="">
+        <label for="card_number">Card Number:</label><br>
+        <input type="text" id="card_number" name="card_number" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" inputmode="numeric" autocomplete="off" required><br><br>
+
+        <label for="card_name">Card Name:</label><br>
+        <input type="text" id="card_name" name="card_name" autocomplete="off" required><br><br>
+
+        <label for="expiry_date">Expiry Date:</label><br>
+        <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" maxlength="5" inputmode="numeric" autocomplete="off" required><br><br>
+
+        <label for="cvv">CVV:</label><br>
+        <input type="password" id="cvv" name="cvv" placeholder="123" maxlength="3" inputmode="numeric" autocomplete="off" required><br><br>
+        
+        <button type="submit" name="action" value="save" onclick="return confirm('Are you sure you want to save this card?');">Save Card</button>
+        <button type="submit" name="action" value="pay">Pay with Card</button>
+    </form>
+    <br>
+    <a href="/manage">Manage Saved Cards</a>
+</body>
+</html>
