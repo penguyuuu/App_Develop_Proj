@@ -1,45 +1,37 @@
-{% extends 'base.html' %}
-
-{% block title %}Manage Account{% endblock %}
-
-{% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">Manage Account</h1>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Account</title>
+</head>
+<body>
+    <h1>Manage Account</h1>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <div class="alert alert-warning">
-                <ul>
-                    {% for message in messages %}
-                        <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+            <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
         {% endif %}
     {% endwith %}
-
     <form method="POST">
-        <div class="mb-3">
-            <label for="email" class="form-label">New Email:</label>
-            <input type="email" name="email" value="{{ session['email'] }}" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="password" class="form-label">New Password:</label>
-            <input type="password" name="password" class="form-control" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary w-100">Update Account</button>
+        <label for="email">New Email:</label>
+        <input type="email" name="email" value="{{ session['email'] }}" required>
+        <br>
+        <label for="password">New Password:</label>
+        <input type="password" name="password" required>
+        <br>
+        <button type="submit">Update Account</button>
     </form>
-
-    <form method="POST" action="{{ url_for('delete_account') }}" class="mt-3">
-        <button type="submit" class="btn btn-danger w-100">Delete Account</button>
+    <form method="POST" action="{{ url_for('delete_account') }}">
+        <button type="submit">Delete Account</button>
     </form>
-
-    <form method="POST" action="{{ url_for('logout') }}" class="mt-3">
-        <button type="submit" class="btn btn-secondary w-100">Logout</button>
+    <form method="POST" action="{{ url_for('logout') }}">
+        <button type="submit">Logout</button>
     </form>
-
-    <p class="text-center mt-3"><a href="{{ url_for('home') }}">Back to Home</a></p>
-</div>
-{% endblock %}
+    <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+    </form>
+</body>
+</html>
