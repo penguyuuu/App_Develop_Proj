@@ -6,29 +6,63 @@
 <h1>Frequently Asked Questions</h1>
 
 <h2>Add a Question</h2>
-<form method="POST">
-    <label for="question">Question:</label><br>
-    <input type="text" id="question" name="question" required><br>
-    <label for="answer">Description:</label><br>
-    <textarea id="answer" name="answer" required></textarea><br>
-    <input type="submit" value="Add">
+<form method="POST" action="{{ url_for('faq') }}">
+    <div class="mb-3">
+        <label for="question" class="form-label">Question:</label>
+        <input type="text" id="question" name="question" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label for="answer" class="form-label">Description:</label>
+        <textarea id="answer" name="answer" class="form-control" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
 </form>
 
 <h2>Current Questions</h2>
-<ul>
+<ul class="list-group">
     {% for faq in faqs %}
-    <li>
+    <li class="list-group-item">
         <strong>{{ faq.question }}</strong><br>
         {{ faq.answer }}<br>
         <span>Likes: <span id="likes-{{ loop.index0 }}">{{ faq.likes }}</span></span>
-        <button id="like-button-{{ loop.index0 }}" onclick="likeQuestion({{ loop.index0 }})">
-            Like (<span id="likes-{{ loop.index0 }}">{{ faq.likes }}</span>)
-        </button>                
-        <a class="edit" href="{{ url_for('views.edit_question', index=loop.index0) }}">Edit</a>
-        <a class="delete" href="{{ url_for('views.delete_question', index=loop.index0) }}">Delete</a>
+        <button class="btn btn-secondary btn-sm" onclick="likeQuestion({{ loop.index0 }})">Like</button>
+        <button class="btn btn-info btn-sm" onclick="reactToQuestion({{ loop.index0 }})">React</button>
+        <a class="btn btn-warning btn-sm" href="{{ url_for('edit_question', index=loop.index0) }}">Edit</a>
+        <a class="btn btn-danger btn-sm" href="{{ url_for('delete_question', index=loop.index0) }}">Delete</a>
     </li>
     {% endfor %}
 </ul>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function likeQuestion(index) {
+        fetch(`/like/${index}`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(`likes-${index}`).innerText = data.likes;
+            });
+    }
+
+    function reactToQuestion(index) {
+        const reaction = prompt("Enter your reaction:");
+        if (reaction) {
+            fetch(`/react/${index}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reaction: reaction })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Reaction added!");
+            });
+        }
+    }
+</script>
+{% endblock %}
+
 {% endblock %}
 
 
