@@ -1,11 +1,15 @@
-{% extends 'base.html' %}
-
-{% block title %}Logout{% endblock %}
-
-{% block content %}
-<div class="container mt-5 text-center">
-    <h1>Goodbye!</h1>
-    <p>You have successfully logged out.</p>
-    <a href="{{ url_for('login') }}" class="btn btn-primary">Log In Again</a>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logged out</title>
+</head>
+<body>
+    <h1>You have successfully logged out.</h1>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <p><a href="{{ url_for('home') }}">Back to home.</a></p>
+</body>
+</html>
