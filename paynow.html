@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayNow Payment</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>PayNow QR Code Payment</h1>
+    <form method="POST">
+        <label for="paynow_data">Enter Payment Details:</label><br>
+        <textarea id="paynow_data" name="paynow_data" rows="4" cols="50" placeholder="e.g., Payment Amount, Account Details" required></textarea><br><br>
+        <button type="submit">Generate QR Code</button>
+    </form>
+    <br>
+    <a href="/">Back to Payment Page</a>
+</body>
+</html>
