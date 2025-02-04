@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, session
 import shelve
 import re
 
@@ -25,117 +25,111 @@ def login_home():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    message = None 
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
 
         if not validate_email(email):
-            flash('Invalid email format.')
-            return redirect(url_for('signup'))
+            message = 'Invalid email format.'
+            return render_template('signup.html', message=message)
 
         if not validate_password(password):
-            flash('Password must be at least 6 characters long.')
-            return redirect(url_for('signup'))
+            message = 'Password must be at least 6 characters long.'
+            return render_template('signup.html', message=message)
 
         with get_user_db() as db:
             if email in db:
-                flash('An account with this email already exists.')
-                return redirect(url_for('signup'))
+                message = 'An account with this email already exists.'
+                return render_template('signup.html', message=message)
 
             db[email] = {'password': password}  # store only email and password
-            flash("Account has been successfully created!")
-            return redirect(url_for('login'))
+            message = "Account has been successfully created!"
+            return render_template('login.html', message=message)
 
     return render_template('signup.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    message = None  
     if request.method == 'POST':
-        email = request.form['email']  #only can use email
+        email = request.form['email']
         password = request.form['password']
 
         with get_user_db() as db:
-            user = db.get(email)  #get user data by email
-
-            #check if user exists and password matches
+            user = db.get(email) 
             if user and user['password'] == password:
-                session['email'] = email  #store email in session
-                flash('Login successful!')
-                return redirect(url_for('manage_account'))
+                session['email'] = email  
+                message = 'Login successful!'
+                return render_template('manage_account.html', message=message)
             else:
-                flash('Invalid email or password!')
-                return redirect(url_for('login'))
+                message = 'Invalid email or password!'
+                return render_template('login.html', message=message)
 
     return render_template('login.html')
 
 
 @app.route('/manage_account', methods=['GET', 'POST'])
 def manage_account():
-    if 'email' not in session:  #check if the user is logged in
-        flash('You need to log in first.')
-        return redirect(url_for('login'))
+    if 'email' not in session:  # check if the user is logged in
+        message = 'You need to log in first.'
+        return render_template('login.html', message=message)
 
     email = session['email']
-    print(f"Current session email: {email}")
 
     with get_user_db() as db:
-        user = db.get(email)  #get user data by email
-        print(f"Retrieved user data: {user}")
+        user = db.get(email)  # get user data by email
 
     if user is None:
-        flash('User not found.')
-        return redirect(url_for('login'))
+        message = 'User  not found.'
+        return render_template('login.html', message=message)
 
     if request.method == 'POST':
         new_email = request.form['email']
         new_password = request.form['password']
 
         if not validate_email(new_email):
-            flash('Invalid email format.')
-            return redirect(url_for('manage_account'))
+            message = 'Invalid email format.'
+            return render_template('manage_account.html', message=message)
 
         if not validate_password(new_password):
-            flash('Password must be at least 6 characters long.')
-            return redirect(url_for('manage_account'))
+            message = 'Password must be at least 6 characters long.'
+            return render_template('manage_account.html', message=message)
 
-        with get_user_db() as db:       #update user data
-            del db[email]  #remove old email entry
-            db[new_email] = {'password': new_password}  #store new email and password
-            session['email'] = new_email  #update session email
-            flash('Account updated successfully!')
-            return redirect(url_for('manage_account'))
+        with get_user_db() as db:  # update user data
+            del db[email]  # remove old email entry
+            db[new_email] = {'password': new_password}  # store new email and password
+            session['email'] = new_email  # update session email
+            message = 'Account updated successfully!'
+            return render_template('manage_account.html', message=message)
 
     return render_template('manage_account.html', user=user)
 
+
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    session.pop('email', None) 
-    session['logout_message'] = 'You have been logged out.'
-    return redirect(url_for('logout_page'))  
-@app.route('/logout_page')
-def logout_page():
-    message = session.pop('logout_message', None)  
+    session.pop('email', None)
+    message = 'You have been logged out.'
     return render_template('logout.html', message=message)
+
 
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
     if 'email' not in session:
-        flash('You need to log in first.')
-        return redirect(url_for('login'))
+        message = 'You need to log in first.'
+        return render_template('login.html', message=message)
 
     email = session['email']
     with get_user_db() as db:
         if email in db:
             del db[email]
-            flash('Your account has been successfully deleted.')
+            message = 'Account successfully deleted.' 
             session.pop('email', None)
-            session.pop('username', None)
         else:
-            flash('User  not found.')
+            message = 'User  not found.'
 
-    return redirect(url_for('home'))
-
+    return render_template('login_home.html', message=message)
 
 if __name__ == '__main__':
     app.run(debug=True)
