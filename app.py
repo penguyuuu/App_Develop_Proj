@@ -1,57 +1,49 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash # type: ignore
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import shelve
 import re
-from werkzeug.security import generate_password_hash, check_password_hash # type: ignore
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 
 def get_user_db():
-    """Open the user database."""
     return shelve.open('user_db', writeback=True)
 
 
 def validate_email(email):
-    """Check if email format is valid."""
     return re.match(r"[^@]+@[^@]+\.[^@]+", email) is not None
 
 
 def validate_password(password):
-    """Ensure password meets length requirement."""
     return len(password) >= 6
 
 
 @app.route('/')
 def home():
-    """Render the home page."""
     return render_template('home.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    """User registration route."""
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
 
         if not validate_email(email):
-            flash('Invalid email format.', 'danger')
+            flash('Invalid email format.')
             return redirect(url_for('signup'))
 
         if not validate_password(password):
-            flash('Password must be at least 6 characters long.', 'danger')
+            flash('Password must be at least 6 characters long.')
             return redirect(url_for('signup'))
 
         with get_user_db() as db:
             if email in db:
-                flash('An account with this email already exists.', 'danger')
+                flash('An account with this email already exists.')
                 return redirect(url_for('signup'))
 
-            hashed_password = generate_password_hash(password)  # Hash the password
-            db[email] = {'password': hashed_password}  # Store securely
-
-            flash("Account created successfully! Please log in.", 'success')
+            db[email] = {'password': password}  # store only email and password
+            flash("Account has been successfully created!")
             return redirect(url_for('login'))
 
     return render_template('signup.html')
@@ -59,20 +51,20 @@ def signup():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """User login route."""
     if request.method == 'POST':
-        email = request.form['email']
+        email = request.form['email']  #only can use email
         password = request.form['password']
 
         with get_user_db() as db:
-            user = db.get(email)
+            user = db.get(email)  #get user data by email
 
-            if user and check_password_hash(user['password'], password):  # Verify hashed password
-                session['user'] = email
-                flash('Login successful!', 'success')
+            #check if user exists and password matches
+            if user and user['password'] == password:
+                session['email'] = email  #store email in session
+                flash('Login successful!')
                 return redirect(url_for('manage_account'))
             else:
-                flash('Invalid email or password.', 'danger')
+                flash('Invalid email or password!')
                 return redirect(url_for('login'))
 
     return render_template('login.html')
@@ -80,68 +72,67 @@ def login():
 
 @app.route('/manage_account', methods=['GET', 'POST'])
 def manage_account():
-    """User account management route."""
-    if 'user' not in session:
-        flash('You need to log in first.', 'warning')
+    if 'email' not in session:  #check if the user is logged in
+        flash('You need to log in first.')
         return redirect(url_for('login'))
 
-    email = session['user']
+    email = session['email']
+    print(f"Current session email: {email}")
 
     with get_user_db() as db:
-        user = db.get(email)
+        user = db.get(email)  #get user data by email
+        print(f"Retrieved user data: {user}")
 
-        if user is None:
-            flash('User not found.', 'danger')
-            return redirect(url_for('login'))
+    if user is None:
+        flash('User not found.')
+        return redirect(url_for('login'))
 
-        if request.method == 'POST':
-            new_email = request.form['email']
-            new_password = request.form['password']
+    if request.method == 'POST':
+        new_email = request.form['email']
+        new_password = request.form['password']
 
-            if not validate_email(new_email):
-                flash('Invalid email format.', 'danger')
-                return redirect(url_for('manage_account'))
+        if not validate_email(new_email):
+            flash('Invalid email format.')
+            return redirect(url_for('manage_account'))
 
-            if not validate_password(new_password):
-                flash('Password must be at least 6 characters long.', 'danger')
-                return redirect(url_for('manage_account'))
+        if not validate_password(new_password):
+            flash('Password must be at least 6 characters long.')
+            return redirect(url_for('manage_account'))
 
-            hashed_password = generate_password_hash(new_password)
-
-            # Update user data securely
-            del db[email]
-            db[new_email] = {'password': hashed_password}
-            session['user'] = new_email  # Update session
-
-            flash('Account updated successfully!', 'success')
+        with get_user_db() as db:       #update user data
+            del db[email]  #remove old email entry
+            db[new_email] = {'password': new_password}  #store new email and password
+            session['email'] = new_email  #update session email
+            flash('Account updated successfully!')
             return redirect(url_for('manage_account'))
 
     return render_template('manage_account.html', user=user)
 
-
-@app.route('/logout')
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    """User logout route."""
-    session.pop('user', None)
-    flash('You have been logged out.', 'info')
-    return redirect(url_for('home'))
-
+    session.pop('email', None) 
+    session['logout_message'] = 'You have been logged out.'
+    return redirect(url_for('logout_page'))  
+@app.route('/logout_page')
+def logout_page():
+    message = session.pop('logout_message', None)  
+    return render_template('logout.html', message=message)
 
 @app.route('/delete_account', methods=['POST'])
 def delete_account():
-    """User account deletion route."""
-    if 'user' not in session:
-        flash('You need to log in first.', 'warning')
+    if 'email' not in session:
+        flash('You need to log in first.')
         return redirect(url_for('login'))
 
-    email = session['user']
+    email = session['email']
     with get_user_db() as db:
         if email in db:
             del db[email]
-            flash('Your account has been successfully deleted.', 'success')
-            session.pop('user', None)
+            flash('Your account has been successfully deleted.')
+            session.pop('email', None)
+            session.pop('username', None)
         else:
-            flash('User not found.', 'danger')
+            flash('User  not found.')
 
     return redirect(url_for('home'))
 
