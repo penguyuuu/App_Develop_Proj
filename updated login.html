@@ -1,0 +1,39 @@
+{% extends "base.html" %} 
+{% block title %}SweetTalk - Order BubbleTea{% endblock %} 
+
+{% block content %} 
+{% from "includes/_formHelper.html" import render_field %} 
+<script> 
+    function showAlert(message) { 
+        if (message) { 
+            alert(message); 
+        } 
+    } 
+</script> 
+
+
+<body onload="showAlert('{{ message }}')"> 
+    <div style="display: flex; margin-top: 60px; font-family: Verdana, Geneva, Tahoma, sans-serif;"> <!-- Adjust margin-top to avoid overlap with navbar -->
+        <div style="flex: 1; padding: 20px; text-align: center;">
+            <h1>Welcome Back!</h1> 
+            <h3>Log back in to your account.</h3>
+            <form method="POST"> 
+                <label for="email">Email:</label> 
+                <br> 
+                <input type="text" name="email" required style="margin: 0 auto; display: block; width: 50%;"> 
+                <br> 
+                <label for="password">Password:</label> 
+                <br> 
+                <input type="password" name="password" required style="margin: 0 auto; display: block; width: 50%;"> 
+                <br> 
+                <button type="submit" style="background-color: #71b371; color: white; padding: 5px; border-radius: 5px; border-color: #5a915a" >Login</button> 
+            </form> 
+            <p>Don't have an account?<a href="{{ url_for('signup') }}"> Sign up here.</a></p> 
+        </div> 
+        <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+            <img src="{{ url_for('static', filename='pexels-quang-nguyen-vinh-222549-6130788.jpg') }}" alt="login image" style="max-width: 100%; height: auto; max-height: 1000px;">
+        </div> 
+    </div> 
+</body> 
+
+{% endblock %}
