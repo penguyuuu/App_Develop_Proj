@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Log Out{% endblock %}
+
+{% block content %}
+    <script>
+        function showAlert(message) {
+            if (message) {
+                alert(message);
+            }
+        }
+    </script>
+<!DOCTYPE html>
+<html>
+    <style>
+        body{
+            text-align: center;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+    </style>
+</head>
+<body onload="showAlert('{{ message }}')">
+    <div style="margin-top: 60px;">
+    <h1>You have successfully logged out.</h1>
+    <p><a href="{{ url_for('home') }}" style="color: #3498db; text-decoration: none;">Back to Home</a></p>
+    </div>
+    </body>
+<html>
+
+    {%endblock%}
