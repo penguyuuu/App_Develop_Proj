@@ -1,3 +1,5 @@
+
+
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 import shelve
 import qrcode
@@ -94,4 +96,5 @@ def paynow():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
 
