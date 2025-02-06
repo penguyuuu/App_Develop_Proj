@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}SweetTalk - Order BubbleTea{% endblock %}
+{% block content %}
+
+<div class="card new Orders" style="max-width: 540px; margin: auto; display: block;">
+    <a href="{{ url_for('new_order', image='classictea.png') }}" style="text-decoration: none; color: inherit;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='classictea.png') }}" class="img-fluid rounded-start" alt="Classic Milk Tea">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">Classic Milk Tea</h5>
+                    <p class="card-text">Old-school bubble tea that is perfect for everyone!</p>
+                    <button type="button">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+
+<div class="card new Orders" style="max-width: 540px; margin: auto; display: block;">
+    <a href="{{ url_for('new_order', image='seasonaltea (4).png') }}" style="text-decoration: none; color: inherit;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='seasonaltea (4).png') }}" class="img-fluid rounded-start" alt="Fruit Tea">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">Fruit Tea</h5>
+                    <p class="card-text">Something tangy and refreshing!</p>
+                    <button type="button">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+
+<div class="card new Orders" style="max-width: 540px; margin: auto; display: block;">
+    <a href="{{ url_for('new_order', image='iceblended.png') }}" style="text-decoration: none; color: inherit;">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="{{ url_for('static', filename='iceblended.png') }}" class="img-fluid rounded-start" alt="Ice Blended Tea">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">Ice Blended Tea</h5>
+                    <p class="card-text">Cool, creamy, and oh-so-refreshing! The perfect chill in every sip.</p>
+                    <button type="button">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+
+
+{% endblock %}
