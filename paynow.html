@@ -4,16 +4,134 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayNow Payment</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background for contrast */
+            color: #333; /* Dark text color for better readability */
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            max-width: 500px;
+            margin-top: 5rem;
+            background-color: #ffffff; /* White background for the container */
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            border: 1px solid rgba(0, 0, 0, 0.1); /* Light border for definition */
+        }
+
+        h1 {
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #000000; /* Black color for the heading */
+        }
+
+        label {
+            font-weight: bold; /* Bold labels for better visibility */
+        }
+
+        textarea {
+            width: 100%; /* Full width for the textarea */
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 0.5rem; /* Padding for textarea */
+            background-color: #f1f1f1; /* Light gray for textarea */
+        }
+
+        textarea:focus {
+            background-color: #ffffff; /* White background on focus */
+            border-color: #007bff; /* Blue border on focus */
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none; /* Remove default outline */
+        }
+
+        button {
+            width: 100%; /* Full width for the button */
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: #97b8dc; /* Darker blue on hover */
+        }
+
+        a {
+            display: block; /* Block display for the link */
+            text-align: center; /* Center align the link */
+            margin-top: 1rem; /* Margin for spacing */
+            color: #007bff; /* Blue color for links */
+        }
+
+        a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        #qrCodeContainer {
+            display: none; /* Initially hidden */
+            text-align: center; /* Center align QR code */
+            margin-top: 2rem; /* Margin for spacing */
+        }
+
+        #timer {
+            font-size: 1.5rem; /* Timer font size */
+            color: #dc3545; /* Red color for timer */
+            margin-top: 1rem; /* Margin for spacing */
+        }
+    </style>
 </head>
 <body>
-    <h1>PayNow QR Code Payment</h1>
-    <form method="POST">
-        <label for="paynow_data">Enter Payment Details:</label><br>
-        <textarea id="paynow_data" name="paynow_data" rows="4" cols="50" placeholder="e.g., Payment Amount, Account Details" required></textarea><br><br>
-        <button type="submit">Generate QR Code</button>
-    </form>
-    <br>
-    <a href="/">Back to Payment Page</a>
+    <div class="container">
+        <h1>PayNow QR Code Payment</h1>
+        <form id="paymentForm" method="POST" onsubmit="generateQRCode(event)">
+            <label for="paynow_data">Enter Payment Details:</label><br>
+            <textarea id="paynow_data" name="paynow_data" rows="4" placeholder="e.g., Payment Amount, Account Details" required></textarea><br>
+            <button type="submit">Generate QR Code</button>
+        </form>
+        <div id="qrCodeContainer">
+            <h2>Your QR Code:</h2>
+            <img id="qrCode" src="" alt="QR Code" />
+            <div id="timer">5:00</div>
+        </div>
+        <a href="/">Back to Payment Page</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function generateQRCode(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Simulate QR code generation (replace with actual QR code generation logic)
+            const paynowData = document.getElementById("paynow_data").value;
+            const qrCodeImage = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(paynowData) + "&size=200x200";
+            document.getElementById("qrCode").src = qrCodeImage;
+
+            // Show QR code container
+            document.getElementById("qrCodeContainer").style.display = "block";
+
+            // Start the timer
+            startTimer(300); // 5 minutes in seconds
+        }
+
+        function startTimer(duration) {
+            let timer = duration, minutes, seconds;
+            const timerDisplay = document.getElementById("timer");
+
+            const interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                timerDisplay.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    document.getElementById("qrCodeContainer").style.display = "none"; // Hide QR code
+                }
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
