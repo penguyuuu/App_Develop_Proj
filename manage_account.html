@@ -1,34 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Account</title>
-    <script>
-        function showAlert(message) {
-            if (message) {
-                alert(message);
-            }
+{% extends "base.html" %}
+{% block title %}SweetTalk - Order BubbleTea{% endblock %}
+
+{% block content %}
+<script>
+    function showAlert(message) {
+        if (message) {
+            alert(message);
         }
-    </script>
-</head>
-<body onload="showAlert('{{ message }}')">
-    <h1>Manage Account</h1>
-    <form method="POST">
-        <label for="email">New Email:</label>
-        <input type="email" name="email" value="{{ session['email'] }}" required>
-        <br>
-        <label for="password">New Password:</label>
-        <input type="password" name="password" required>
-        <br>
-        <button type="submit">Update Account</button>
-    </form>
-    <form method="POST" action="{{ url_for('delete_account') }}">
-        <button type="submit">Delete Account</button>
-    </form>
-    <form method="POST" action="{{ url_for('logout') }}">
-        <button type="submit">Logout</button>
-    </form>
-    <p><a href="{{ url_for('login_home') }}">Back to Home</a></p>
+    }
+</script>
+
+<style>
+    body {
+        text-align: center;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+</style>
+
+<body onload="showAlert('{{ message }}')"
+    style="text-align: center; font-family: Verdana, Geneva, Tahoma, sans-serif; background-color: #f9f9f9; padding: 20px;">
+    <div style="margin-top: 60px;">
+        <h1 style="color: #333;">Manage Account</h1>
+
+        <form method="POST" style="margin-bottom: 20px;">
+            <label for="email" style="display: block; margin-bottom: 5px;">Update Email:</label>
+            <input type="email" name="email" required
+                style="padding: 10px; width: 80%; max-width: 300px; border: 1px solid #ccc; border-radius: 4px;">
+            <br><br>
+
+            <label for="password" style="display: block; margin-bottom: 5px;">Update Password:</label>
+            <input type="password" name="password" required
+                style="padding: 10px; width: 80%; max-width: 300px; border: 1px solid #ccc; border-radius: 4px;">
+            <br><br>
+
+            <button type="submit"
+                style="background-color: #71b371; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;">Update
+                Account</button>
+        </form>
+
+        <form method="POST" action="{{ url_for('delete_account') }}" style="margin-bottom: 20px;">
+            <button type="submit"
+                style="background-color: #e67d71; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;">Delete
+                Account</button>
+        </form>
+
+        <form method="POST" action="{{ url_for('logout') }}" style="margin-bottom: 20px;">
+            <button type="submit"
+                style="background-color: #71b4e1; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer;">Logout</button>
+        </form>
+
+        <p><a href="{{ url_for('home') }}" style="color: #65a7d3; text-decoration: none;">Back to Home</a></p>
+    </div>
+    <footer style="background-color: #000000; color: white; padding: 20px; text-align: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto;">
+            <div style="flex: 1; margin-right: 20px;">
+                <h4>Follow Us</h4>
+                <a href="https://www.facebook.com/sweettalk" style="color: white; margin: 0 10px;">Facebook</a>
+                <a href="https://www.instagram.com/sweettalk" style="color: white; margin: 0 10px;">Instagram</a>
+                <a href="https://www.twitter.com/sweettalk" style="color: white; margin: 0 10px;">Twitter</a>
+            </div>
+            <div style="flex: 1; margin-left: 20px;">
+                <h4>Contact Us</h4>
+                <p style="margin: 0;">Email: info@sweettalk.com</p>
+                <p style="margin: 0;">Phone: (123) 456-7890</p>
+            </div>
+        </div>
+        <div style="margin-top: 10px;">
+            <p>&copy; 2025 Sweet Talk. All rights reserved.</p>
+        </div>
+      </footer>
 </body>
-</html>
+
+{%endblock%}

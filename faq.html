@@ -1,142 +1,57 @@
+{% extends "base.html" %}
+{% block title %}SweetTalk - Order BubbleTea{% endblock %}
 
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+    <title>FAQ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-
-faq(html): 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>FAQ Page</title>
-    <script>
-            function likeQuestion(faq) {
-        fetch(`/like/${faq}`, { method: 'POST' })
-            .then(response => response.json())
-            .then(data => {
-                // Update the likes span and button text
-                const likeButton = document.getElementById(`like-button-${faq}`);
-                const likesSpan = document.getElementById(`likes-${faq}`);
-                likesSpan.innerText = data.likes;
-                likeButton.innerHTML = `Like (${data.likes})`;
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    </script>
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('faq') }}">Home</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <h1>Frequently Asked Questions</h1>
-
-        <h2>Add a Question</h2>
+    <div class="container mt-3">
+        <h2>Frequently Asked Questions</h2>
         <form method="POST">
-            <label for="question">Question:</label><br>
-            <input type="text" id="question" name="question" required><br>
-            <label for="answer">Description:</label><br>
-            <textarea id="answer" name="answer" required></textarea><br>
-            <input type="submit" value="Add">
+            <div class="mb-3">
+                <label for="question" class="form-label">Question</label>
+                <input type="text" class="form-control" name="question" required>
+            </div>
+            <div class="mb-3">
+                <label for="answer" class="form-label">Description</label>
+                <textarea class="form-control" name="answer" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add FAQ</button>
         </form>
-
-        <h2>Current Questions</h2>
-        <ul>
+        <hr>
+        <h3>Existing FAQs</h3>
+        <ul class="list-group">
             {% for faq in faqs %}
-            <li>
-                <strong>{{ faq.question }}</strong><br>
-                {{ faq.answer }}<br>
-                <span>Likes: <span id="likes-{{ loop.index0 }}">{{ faq.likes }}</span></span>
-                <button id="like-button-{{ loop.index0 }}" onclick="likeQuestion({{ loop.index0 }})">
-                    Like (<span id="likes-{{ loop.index0 }}">{{ faq.likes }}</span>)
-                </button>                
-                <a class="edit" href="{{ url_for('edit_question', index=loop.index0) }}">Edit</a>
-                <a class="delete" href="{{ url_for('delete_question', index=loop.index0) }}">Delete</a>
-            </li>
+                <li class="list-group-item">
+                    <strong>{{ faq.question }}</strong><br>
+                    {{ faq.answer }}
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <div>
+                            <button class="btn btn-light btn-sm like-button" data-faq-id="{{ loop.index0 }}">👍 Like</button>
+                            <span class="like-count" id="like-count-{{ loop.index0 }}">{{ faq.likes if faq.likes is not none else 0 }}</span>
+                        </div>
+                        <form action="{{ url_for('delete_faq', faq_id=loop.index0) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                        <a href="{{ url_for('edit_faq', faq_id=loop.index0) }}" class="btn btn-warning btn-sm">Edit</a>
+                    </div>
+                </li>
             {% endfor %}
         </ul>
-    </main>
-</body>
-</html>
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-add question html: 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Add Question</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('faq') }}">Home</a></li>
-                <li><a href="{{ url_for('add_question')}}">Add Question</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
+    </div>
+
     <script>
-        function validateForm(){
-            const question = document.getElementById('question').value;
-            const answer = document.getElementById('answer').value;
-            if (!question || !answer){
-                alert("Please fill out both the questions and description fields");
-                return false; 
-            }
-            return true;
-        }
+        // JavaScript to handle like button clicks
+        document.querySelectorAll('.like-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const faqId = this.getAttribute('data-faq-id');
+                const likeCountElement = document.getElementById('like-count-' + faqId);
+                let currentLikes = parseInt(likeCountElement.textContent) || 0; // Default to 0 if NaN
+                currentLikes += 1; // Increment the like count
+                likeCountElement.textContent = currentLikes; // Update the displayed count
+            });
+        });
     </script>
-        <h1>Add Question</h1>
-        <form method="POST">
-            <label for="question">Question:</label><br>
-            <input type="text" id="question" name="question" required><br>
-            <label for="answer">description:</label><br>
-            <textarea id="answer" name="answer" required></textarea><br>
-            <input type="submit" value="Add">
-        </form>
-        <a href="{{ url_for('faq') }}">Back to FAQ</a>
-    </main>
-</body>
-</html>
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-edit question html 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Edit Question</title>
-</head>
-<body>
-    <header>
-         <nav>
-            <ul>
-                <li><a href="{{ url_for('faq')}}">Home</a></li>
-                <li><a href="{{ url_for('add_question')}}">Add Question</a></li>
-            </ul>
-         </nav>
-    </header>
-    <main>
-        <h1>Edit Question</h1>
-        <form method="POST">
-            <label for="question">Question:</label><br>
-            <input type="text" id="question" name="question" value="{{ faq.question }}" required>
-            <br>
-            <label for="answer">description:</label>
-            <br>
-            <textarea id="answer" name="answer" required> {{ faq.answer }}</textarea><br>
-            <input type="submit" value="Update">
-        </form>
-        <a href="{{ url_for('faq') }}">Back to FAQ</a>
-    </main>    
-</body>
-</html>
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+{% endblock %}

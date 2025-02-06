@@ -1,28 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <script>
-        function showAlert(message) {
-            if (message) {
-                alert(message);
-            }
-        }
-    </script>
-</head>
-<body onload="showAlert('{{ message }}')">
-    <h1>Login</h1>
-    <form method="POST">
-        <label for="email">Email:</label>
-        <input type="text" name="email" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" name="password" required>
-        <br>
-        <button type="submit">Login</button>
-    </form>
-    <p><a href="{{ url_for('signup') }}">Don't have an account? Sign up here.</a></p>
-</body>
-</html>
+{% extends "base.html" %} 
+{% block title %}SweetTalk - Order BubbleTea{% endblock %} 
+
+{% block content %} 
+{% from "includes/_formHelper.html" import render_field %} 
+<script> 
+    function showAlert(message) { 
+        if (message) { 
+            alert(message); 
+        } 
+    } 
+</script> 
+
+
+<body onload="showAlert('{{ message }}')"> 
+    <div style="display: flex; margin-top: 60px; font-family: Verdana, Geneva, Tahoma, sans-serif; margin-bottom: 70px;" > <!-- Adjust margin-top to avoid overlap with navbar -->
+        <div style="flex: 1; padding: 20px; text-align: center;">
+            <h1>Welcome Back!</h1> 
+            <h3>Log back in to your account.</h3>
+            <form method="POST"> 
+                <label for="email">Email:</label> 
+                <br> 
+                <input type="text" name="email" required style="margin: 0 auto; display: block; width: 50%;"> 
+                <br> 
+                <label for="password">Password:</label> 
+                <br> 
+                <input type="password" name="password" required style="margin: 0 auto; display: block; width: 50%;"> 
+                <br> 
+                <button type="submit" style="background-color: #71b371; color: white; padding: 5px; border-radius: 5px; border-color: #5a915a" >Login</button> 
+            </form> 
+            <p>Don't have an account?<a href="{{ url_for('signup') }}"> Sign up here.</a></p> 
+        </div> 
+        <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+            <img src="{{ url_for('static', filename='loginslave.jpg') }}" alt="login image" style="max-width: 100%; height: auto; max-height: 1000px;">
+        </div> 
+    </div> 
+    <footer style="background-color: #000000; color: white; padding: 20px; text-align: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto;">
+            <div style="flex: 1; margin-right: 20px;">
+                <h4>Follow Us</h4>
+                <a href="https://www.facebook.com/sweettalk" style="color: white; margin: 0 10px;">Facebook</a>
+                <a href="https://www.instagram.com/sweettalk" style="color: white; margin: 0 10px;">Instagram</a>
+                <a href="https://www.twitter.com/sweettalk" style="color: white; margin: 0 10px;">Twitter</a>
+            </div>
+            <div style="flex: 1; margin-left: 20px;">
+                <h4>Contact Us</h4>
+                <p style="margin: 0;">Email: info@sweettalk.com</p>
+                <p style="margin: 0;">Phone: (123) 456-7890</p>
+            </div>
+        </div>
+        <div style="margin-top: 10px;">
+            <p>&copy; 2025 Sweet Talk. All rights reserved.</p>
+        </div>
+      </footer>
+</body> 
+
+{% endblock %}

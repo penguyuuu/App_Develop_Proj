@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}SweetTalk - Order BubbleTea{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> 
+    <title>Edit Question</title> 
+    <main> 
+        <h1>Edit Question</h1> 
+        <form method="POST"> 
+            <label for="question">Question:</label><br> 
+            <input type="text" id="question" name="question" value="{{ faq.question }}" required> 
+            <br> 
+            <label for="answer">description:</label> 
+            <br> 
+            <textarea id="answer" name="answer" required>{{ faq.answer }}</textarea><br> 
+            <input type="submit" value="Update"> 
+        </form> 
+        <a href="{{ url_for('faq') }}">Back to FAQ</a> 
+    </main>     
+
+    {%endblock%}

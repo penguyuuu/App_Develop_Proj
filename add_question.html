@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}SweetTalk - Order BubbleTea{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> 
+    <title>Add Question</title> 
+
+    <main> 
+    <script> 
+        function validateForm(){ 
+            const question = document.getElementById('question').value; 
+            const answer = document.getElementById('answer').value; 
+            if (!question || !answer){ 
+                alert("Please fill out both the questions and description fields"); 
+                return false;  
+            } 
+            return true; 
+        } 
+    </script> 
+        <h1>Add Question</h1> 
+        <form method="POST"> 
+            <label for="question">Question:</label><br> 
+            <input type="text" id="question" name="question" required><br> 
+            <label for="answer">description:</label><br> 
+            <textarea id="answer" name="answer" required></textarea><br> 
+            <input type="submit" value="Add"> 
+        </form> 
+        <a href="{{ url_for('faq') }}">Back to FAQ</a> 
+    </main> 
+
+    {%endblock%}

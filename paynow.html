@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayNow Payment</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+{% extends "base.html" %}
+{% block title %}SweetTalk - Order BubbleTea{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         body {
             background-color: #f8f9fa; /* Light gray background for contrast */
@@ -79,59 +77,57 @@
             margin-top: 1rem; /* Margin for spacing */
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <h1>PayNow QR Code Payment</h1>
-        <form id="paymentForm" method="POST" onsubmit="generateQRCode(event)">
-            <label for="paynow_data">Enter Payment Details:</label><br>
-            <textarea id="paynow_data" name="paynow_data" rows="4" placeholder="e.g., Payment Amount, Account Details" required></textarea><br>
-            <button type="submit">Generate QR Code</button>
-        </form>
-        <div id="qrCodeContainer">
-            <h2>Your QR Code:</h2>
-            <img id="qrCode" src="" alt="QR Code" />
-            <div id="timer">5:00</div>
-        </div>
-        <a href="/">Back to Payment Page</a>
+
+<div class="container">
+    <h1>PayNow QR Code Payment</h1>
+    <form id="paymentForm" method="POST" onsubmit="generateQRCode(event)">
+        <label for="paynow_data">Enter Payment Details:</label><br>
+        <textarea id="paynow_data" name="paynow_data" rows="4" placeholder="e.g., Payment Amount, Account Details" required></textarea><br>
+        <button type="submit">Generate QR Code</button>
+    </form>
+    <div id="qrCodeContainer">
+        <h2>Your QR Code:</h2>
+        <img id="qrCode" src="" alt="QR Code" />
+        <div id="timer">5:00</div>
     </div>
+    <a href="/">Back to Payment Page</a>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function generateQRCode(event) {
-            event.preventDefault(); // Prevent form submission
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function generateQRCode(event) {
+        event.preventDefault(); // Prevent form submission
 
-            // Simulate QR code generation (replace with actual QR code generation logic)
-            const paynowData = document.getElementById("paynow_data").value;
-            const qrCodeImage = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(paynowData) + "&size=200x200";
-            document.getElementById("qrCode").src = qrCodeImage;
+        // Simulate QR code generation (replace with actual QR code generation logic)
+        const paynowData = document.getElementById("paynow_data").value;
+        const qrCodeImage = "https://api.qrserver.com/v1/create-qr-code/?data=" + encodeURIComponent(paynowData) + "&size=200x200";
+        document.getElementById("qrCode").src = qrCodeImage;
 
-            // Show QR code container
-            document.getElementById("qrCodeContainer").style.display = "block";
+        // Show QR code container
+        document.getElementById("qrCodeContainer").style.display = "block";
 
-            // Start the timer
-            startTimer(300); // 5 minutes in seconds
-        }
+        // Start the timer
+        startTimer(300); // 5 minutes in seconds
+    }
 
-        function startTimer(duration) {
-            let timer = duration, minutes, seconds;
-            const timerDisplay = document.getElementById("timer");
+    function startTimer(duration) {
+        let timer = duration, minutes, seconds;
+        const timerDisplay = document.getElementById("timer");
 
-            const interval = setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
+        const interval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
 
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
 
-                timerDisplay.textContent = minutes + ":" + seconds;
+            timerDisplay.textContent = minutes + ":" + seconds;
 
-                if (--timer < 0) {
-                    clearInterval(interval);
-                    document.getElementById("qrCodeContainer").style.display = "none"; // Hide QR code
-                }
-            }, 1000);
-        }
-    </script>
-</body>
-</html>
+            if (--timer < 0) {
+                clearInterval(interval);
+                document.getElementById("qrCodeContainer").style.display = "none"; // Hide QR code
+            }
+        }, 1000);
+    }
+</script>
+{%endblock%}

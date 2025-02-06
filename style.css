@@ -1,0 +1,36 @@
+/* Reset margins and padding for the body and html */
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style for the homepic container */
+.homepic {
+    width: fit-content; /* Adjusts to the content */
+    height: 500px; /* Fixed height */
+    margin: 0; /* Remove any margin */
+    padding: 0; /* Remove any padding */
+}
+
+/* Style for the image */
+.homepic img {
+    display: block; /* Prevents bottom whitespace */
+    width: 1250px; /* Set width */
+    height: 500px; /* Set height */
+    margin: 0; /* Remove any margin */
+    padding: 0; /* Remove any padding */
+}
+
+.Bubbletea_orders {
+    display: flex;           /* Enables flexbox */
+    flex-direction: column;  /* Stacks cards vertically */
+    align-items: center;     /* Centers items horizontally */
+    justify-content: center; /* Centers items vertically (optional) */
+    gap: 20px;               /* Adds space between cards */
+    min-height: 100vh;       /* Makes sure the section fills the page height */
+}
+
+.card.new.Orders {
+    width: 540px; /* Ensures all cards have the same width */
+    text-align: center; /* Centers text inside the card */
+}

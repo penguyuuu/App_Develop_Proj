@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}SweetTalk - Home{% endblock %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<body>
+<div class="homepic">
+    <img src="{{ url_for('static', filename='app dev homapage 1.jpg') }}" alt="Home Image" height="500px" width="1250px">
+</div>
+<br>
+<div class="card-group">
+    <div class="card">
+      <img src="{{ url_for('static',filename='seasonaltea (4).png') }}" class="card-img-top" alt="seaonal tea">
+      <div class="card-body">
+        <h5 class="card-title">Seasonal Tea</h5>
+        <p class="card-text">Enjoy our special milk tea flavors inspired by the seasons! 
+            From fruity infusions in summer to warm, spiced blends in winter,
+             our seasonal milk teas bring a refreshing twist to your favorite drink. Limited-time only!</p>
+        <p class="card-text"><small class="text-body-secondary">Menu items and flavors may vary by location and are subject to availability</small></p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="{{ url_for('static',filename='result.png') }}" class="card-img-top" alt="Classic Milk Tea Series" width="400px" height="350px">
+      <div class="card-body">
+        <h5 class="card-title">Classic Milk Tea</h5>
+        <p class="card-text">A timeless favorite, our Classic Milk Tea is
+             made with premium black tea and creamy milk for a smooth, rich taste.
+             Perfectly balanced in sweetness and boldness, this is the ultimate go-to drink
+              for milk tea lovers.</p>
+        <p class="card-text"><small class="text-body-secondary">Menu items and flavors may vary by location and are subject to availability</small></p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="{{ url_for('static',filename='result (1).png') }}" class="card-img-top" alt="Ice Blended Tea">
+      <div class="card-body">
+        <h5 class="card-title">Ice blended Tea</h5>
+        <p class="card-text">A cool and creamy treat! Our Ice Blended Milk Tea is a refreshing twist 
+            on traditional milk tea, blended with ice to create a smooth, 
+            slushy texture. Perfect for beating the heat while enjoying your favorite flavors!</p>
+        <p class="card-text"><small class="text-body-secondary">Menu items and flavors may vary by location and are subject to availability</small></p>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <footer style="background-color: #000000; color: white; padding: 20px; text-align: center;">
+    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto;">
+        <div style="flex: 1; margin-right: 20px;">
+            <h4>Follow Us</h4>
+            <a href="https://www.facebook.com/sweettalk" style="color: white; margin: 0 10px;">Facebook</a>
+            <a href="https://www.instagram.com/sweettalk" style="color: white; margin: 0 10px;">Instagram</a>
+            <a href="https://www.twitter.com/sweettalk" style="color: white; margin: 0 10px;">Twitter</a>
+        </div>
+        <div style="flex: 1; margin-left: 20px;">
+            <h4>Contact Us</h4>
+            <p style="margin: 0;">Email: info@sweettalk.com</p>
+            <p style="margin: 0;">Phone: (123) 456-7890</p>
+        </div>
+    </div>
+    <div style="margin-top: 10px;">
+        <p>&copy; 2025 Sweet Talk. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+
+{% endblock %}
