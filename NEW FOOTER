@@ -1,0 +1,39 @@
+ <footer class="footer mt-auto" style="background-color: #939393; color: #d3d3d3; padding: 40px; text-align: center;">
+    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto;">
+
+        <!-- Navigation Links in Table Format -->
+        <div>
+            <table style="border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 5px;"><a href="{{ url_for('home') }}" style="color: #d3d3d3; text-decoration: none;">Home</a></td>
+                    <td style="padding: 5px;"><a href="{{ url_for('Aboutus') }}" style="color: #d3d3d3; text-decoration: none;">About Us</a></td>
+                    <td style="padding: 5px;"><a href="{{ url_for('faq') }}" style="color: #d3d3d3; text-decoration: none;">FAQ</a></td>
+                </tr>
+                <tr>
+                    <td style="padding: 5px;"><a href="{{ url_for('orders') }}" style="color: #d3d3d3; text-decoration: none;">Orders</a></td>
+                    <td style="padding: 5px;"><a href="{{ url_for('login') }}" style="color: #d3d3d3; text-decoration: none;">Log In</a></td>
+                    <td style="padding: 5px;"><a href="{{ url_for('signup') }}" style="color: #d3d3d3; text-decoration: none;">Sign Up</a></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Social Media Icons -->
+        <div>
+            <h4 style="color: #d3d3d3; margin-bottom: 10px;">Follow Us</h4>
+            <a href="https://www.facebook.com/sweettalk" style="margin: 0 10px; text-decoration: none;">
+                <img src="{{ url_for('static', filename='facebook-icon.png') }}" alt="Facebook" style="width: 24px; height: 24px;">
+            </a>
+            <a href="https://www.instagram.com/sweettalk" style="margin: 0 10px; text-decoration: none;">
+                <img src="{{ url_for('static', filename='instagram-icon.png') }}" alt="Instagram" style="width: 24px; height: 24px;">
+            </a>
+            <a href="https://www.twitter.com/sweettalk" style="margin: 0 10px; text-decoration: none;">
+                <img src="{{ url_for('static', filename='twitter-icon.png') }}" alt="Twitter" style="width: 24px; height: 24px;">
+            </a>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div style="margin-top: 20px;">
+        <p style="margin: 0;">&copy; 2025 Sweet Talk. All rights reserved.</p>
+    </div>
+</footer>
