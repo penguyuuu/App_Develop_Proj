@@ -1,0 +1,140 @@
+@app.route('/orders')
+def orders():
+    return render_template('orders.html')
+# Orders Database
+def get_orders_db():
+    return shelve.open('orders.db')
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/newOrders', methods=['GET', 'POST'])
+def new_order():
+    form = BubbleTeaForm(request.form)
+    image = request.args.get('image', 'default.png')  # Get image from URL
+    if request.method == 'POST' and form.validate():
+        db = shelve.open('orders.db', 'c')
+        orders_dict = db.get('Orders', {})
+        order = {
+            'size': form.size.data,
+            'sweetness': form.sweetness.data,
+            'temperature': form.temperature.data,
+            'remarks': form.remarks.data,
+            'image': image  # Save image filename with order
+        }
+        order_id = str(len(orders_dict) + 1)
+        orders_dict[order_id] = order
+        db['Orders'] = orders_dict
+        db.close()
+        return redirect(url_for('all_orders'))
+
+    return render_template('newOrders.html', form=form, image=image)
+
+
+@app.route('/all_orders')
+def all_orders():
+    db = get_orders_db()
+    orders = db.get('Orders', [])
+    db.close()
+    return render_template('all_orders.html', orders=orders)
+
+# cart
+
+@app.route('/cart')
+def cart():
+    # Load cart items from session
+    cart_items = session.get('cart', {})
+    
+    # Optionally, load from orders.db if you want to display previously saved items
+    db = shelve.open('orders.db', 'r')
+    saved_cart_items = db.get('Cart', {})
+    db.close()
+    
+    # Combine session cart with saved items if needed
+    combined_cart_items = {**saved_cart_items, **cart_items}
+    
+    return render_template('cart.html', cart_items=combined_cart_items)
+
+@app.route('/add_to_cart', methods=['POST'])
+def add_to_cart():
+    form = BubbleTeaForm(request.form)
+    image = request.args.get('image', 'default.png')  # Get image from URL
+    if form.validate():
+        order = {
+            'size': form.size.data,
+            'sweetness': form.sweetness.data,
+            'temperature': form.temperature.data,
+            'remarks': form.remarks.data,
+            'image': image  # Save image filename with order
+        }
+        
+        # Save to session
+        if 'cart' not in session:
+            session['cart'] = {}
+        
+        # Generate a unique order ID
+        order_id = str(len(session['cart']) + 1)
+        session['cart'][order_id] = order
+        session.modified = True
+        
+        # Optionally, save to orders.db if you want to persist it
+        db = shelve.open('orders.db', 'c')
+        orders_dict = db.get('Cart', {})
+        orders_dict[order_id] = order
+        db['Cart'] = orders_dict
+        db.close()
+        
+    return redirect(url_for('cart'))
+
+@app.route('/remove_from_cart/<order_id>', methods=['POST'])
+def remove_from_cart(order_id):
+    # Remove from session
+    if 'cart' in session and order_id in session['cart']:
+        del session['cart'][order_id]
+        session.modified = True
+        
+        # Optionally, remove from orders.db if you want to persist changes
+        db = shelve.open('orders.db', 'c')
+        orders_dict = db.get('Cart', {})
+        if order_id in orders_dict:
+            del orders_dict[order_id]
+            db['Cart'] = orders_dict
+        db.close()
+        
+    return redirect(url_for('cart'))
+
+@app.route('/clear_cart', methods=['POST'])
+def clear_cart():
+    # Clear the session cart
+    session.pop('cart', None)
+    
+    # Optionally, clear the saved cart in orders.db
+    db = shelve.open('orders.db', 'c')
+    if 'Cart' in db:
+        del db['Cart']  # Remove the Cart entry from the database
+    db.close()
+    
+    return redirect(url_for('cart'))
+
+@app.route('/update_cart_item/<order_id>', methods=['POST'])
+def update_cart_item(order_id):
+    if 'cart' in session and order_id in session['cart']:
+        # Update the order details
+        order = session['cart'][order_id]
+        order['size'] = request.form.get('size')
+        order['sweetness'] = request.form.get('sweetness')
+        order['temperature'] = request.form.get('temperature')
+        order['remarks'] = request.form.get('remarks')
+        
+        # Save the updated order back to the session
+        session.modified = True
+        
+        # Optionally, update the orders.db if you want to persist changes
+        db = shelve.open('orders.db', 'c')
+        orders_dict = db.get('Cart', {})
+        if order_id in orders_dict:
+            orders_dict[order_id] = order  # Update the order in the database
+            db['Cart'] = orders_dict
+        db.close()
+        
+    return redirect(url_for('cart'))
