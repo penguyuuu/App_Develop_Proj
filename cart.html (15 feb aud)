@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}SweetTalk - Your Cart{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Your Cart</h1>
+
+{% if cart_items %}
+    <ul class="list-group">
+        {% for order_id, order in cart_items.items() %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="{{ url_for('static', filename=order.image) }}" alt="{{ order.image }}" class="img-fluid">
+                    </div>
+                    <div class="col-md-10">
+                        <form method="POST" action="{{ url_for('update_cart_item', order_id=order_id) }}" style="display:inline;">
+                            <div>
+                                <label for="size">Size:</label>
+                                <select name="size" class="form-control" required>
+                                    <option value="small" {% if order.size == 'small' %}selected{% endif %}>Small</option>
+                                    <option value="medium" {% if order.size == 'medium' %}selected{% endif %}>Medium</option>
+                                    <option value="large" {% if order.size == 'large' %}selected{% endif %}>Large</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="sweetness">Sweetness:</label>
+                                <select name="sweetness" class="form-control" required>
+                                    <option value="0%" {% if order.sweetness == '0%' %}selected{% endif %}>0%</option>
+                                    <option value="30%" {% if order.sweetness == '30%' %}selected{% endif %}>30%</option>
+                                    <option value="50%" {% if order.sweetness == '50%' %}selected{% endif %}>50%</option>
+                                    <option value="70%" {% if order.sweetness == '70%' %}selected{% endif %}>70%</option>
+                                    <option value="100%" {% if order.sweetness == '100%' %}selected{% endif %}>100%</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="temperature">Temperature:</label>
+                                <select name="temperature" class="form-control" required>
+                                    <option value="hot" {% if order.temperature == 'hot' %}selected{% endif %}>Hot</option>
+                                    <option value="cold" {% if order.temperature == 'cold' %}selected{% endif %}>Cold</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="remarks">Remarks:</label>
+                                <input type="text" name="remarks" class="form-control" value="{{ order.remarks }}">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
+                        </form>
+                        <form method="POST" action="{{ url_for('remove_from_cart', order_id=order_id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm mt-2">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <form method="POST" action="{{ url_for('clear_cart') }}">
+        <button type="submit" class="btn btn-warning mt-3">Clear Cart</button>
+    </form>
+    <a href="{{ url_for('payment') }}" class="btn btn-success mt-3">Proceed to Payment</a>
+    <br></br>
+    <a href="{{ url_for('orders') }}" class="btn btn-secondary">Back to Menu</a>
+{% else %}
+    <p>Your cart is empty.</p>
+    <a href="{{ url_for('orders') }}" class="btn btn-primary">Go back to Orders</a>
+{% endif %}
+
+{% endblock %}
