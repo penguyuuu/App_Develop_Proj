@@ -1,11 +1,14 @@
 class BubbleTea:
-    def __init__(self, size, sweetness, temperature, remarks, submit):
+    def __init__(self, type, size, sweetness, temperature, remarks, submit):
+        self.__type = type
         self.__size = size
         self.__sweetness = sweetness
         self.__temperature = temperature
         self.__remarks = remarks
         self.__submit = submit
 
+    def get_type(self):
+        return self.__type
 
     def get_size(self):
         return self.__size
@@ -21,6 +24,9 @@ class BubbleTea:
 
     def get_submit(self):
         return self.__submit
+
+    def set_type(self, type):
+        self.__type = type
 
     def set_size(self, size):
         self.__size = size

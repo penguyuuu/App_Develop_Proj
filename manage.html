@@ -2,8 +2,10 @@
 {% block title %}SweetTalk - Order BubbleTea{% endblock %}
 
 {% block content %}
+{% from "includes/_formHelper.html" import render_field %}
     <link rel="stylesheet" href="/static/style.css">
 
+<body>
     <h1>Manage Saved Cards</h1>
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -29,5 +31,6 @@
     </ul>
     <br>
     <a href="/">Back to Payment Page</a>
+</body>
 
 {%endblock%}

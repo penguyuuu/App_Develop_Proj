@@ -4,6 +4,9 @@ from wtforms.validators import DataRequired
 
 
 class BubbleTeaForm(Form):
+    type = SelectField('Bubble tea', choices=[('green milktea', 'Green milktea'),
+                                              ('thai milktea', 'Thai milktea'), ('oolong milktea', 'Oolong milktea')],
+                       validators=[DataRequired()])
     size = SelectField('Size', choices=[('small', 'Small'), ('medium', 'Medium'), ('large', 'Large')],
                        validators=[DataRequired()])
     sweetness = SelectField('Sweetness Level',

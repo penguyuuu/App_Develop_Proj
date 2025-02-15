@@ -1,57 +1,149 @@
-{% extends "base.html" %} 
-{% block title %}SweetTalk - Order BubbleTea{% endblock %} 
+{% extends "base.html" %}
 
-{% block content %} 
-{% from "includes/_formHelper.html" import render_field %} 
-<script> 
-    function showAlert(message) { 
-        if (message) { 
-            alert(message); 
-        } 
-    } 
-</script> 
+{% block title %}SweetTalk - Log In BubbleTea{% endblock %}
 
-
-<body onload="showAlert('{{ message }}')"> 
-    <div style="display: flex; margin-top: 60px; font-family: Verdana, Geneva, Tahoma, sans-serif; margin-bottom: 70px;" > <!-- Adjust margin-top to avoid overlap with navbar -->
-        <div style="flex: 1; padding: 20px; text-align: center;">
-            <h1>Welcome Back!</h1> 
-            <h3>Log back in to your account.</h3>
-            <form method="POST"> 
-                <label for="email">Email:</label> 
-                <br> 
-                <input type="text" name="email" required style="margin: 0 auto; display: block; width: 50%;"> 
-                <br> 
-                <label for="password">Password:</label> 
-                <br> 
-                <input type="password" name="password" required style="margin: 0 auto; display: block; width: 50%;"> 
-                <br> 
-                <button type="submit" style="background-color: #71b371; color: white; padding: 5px; border-radius: 5px; border-color: #5a915a" >Login</button> 
-            </form> 
-            <p>Don't have an account?<a href="{{ url_for('signup') }}"> Sign up here.</a></p> 
-        </div> 
-        <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
-            <img src="{{ url_for('static', filename='loginslave.jpg') }}" alt="login image" style="max-width: 100%; height: auto; max-height: 1000px;">
-        </div> 
-    </div> 
-    <footer style="background-color: #000000; color: white; padding: 20px; text-align: center;">
-        <div style="display: flex; justify-content: space-between; align-items: center; max-width: 800px; margin: 0 auto;">
-            <div style="flex: 1; margin-right: 20px;">
-                <h4>Follow Us</h4>
-                <a href="https://www.facebook.com/sweettalk" style="color: white; margin: 0 10px;">Facebook</a>
-                <a href="https://www.instagram.com/sweettalk" style="color: white; margin: 0 10px;">Instagram</a>
-                <a href="https://www.twitter.com/sweettalk" style="color: white; margin: 0 10px;">Twitter</a>
-            </div>
-            <div style="flex: 1; margin-left: 20px;">
-                <h4>Contact Us</h4>
-                <p style="margin: 0;">Email: info@sweettalk.com</p>
-                <p style="margin: 0;">Phone: (123) 456-7890</p>
+{% block content %}
+<div class="container">
+    <div class="form-container" id="form-container">
+        <!-- Login Form -->
+        <div class="login-form">
+            <h2>Login</h2>
+            <form action="{{ url_for('login') }}" method="POST">
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" name="email" id="login-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password:</label>
+                    <input type="password" name="password" id="login-password" placeholder="Enter your password"
+                        required>
+                </div>
+                <button type="submit">Log In</button>
+            </form>
+            {% if error %}
+            <p style="color:red; font-size:14px;">{{ error }}</p>
+            {% endif %}
+            <div class="toggle-btn">
+                <a href="javascript:void(0);" onclick="toggleForm()">Don't have an account? Sign Up</a>
             </div>
         </div>
-        <div style="margin-top: 10px;">
-            <p>&copy; 2025 Sweet Talk. All rights reserved.</p>
-        </div>
-      </footer>
-</body> 
 
+        <!-- Signup Form -->
+        <div class="signup-form">
+            <h2>Sign Up</h2>
+            <form action="/signup" method="POST">
+                <div class="form-group">
+                    <label for="signup-name">Name:</label>
+                    <input type="text" name="name" id="signup-name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email:</label>
+                    <input type="email" name="email" id="signup-email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password:</label>
+                    <input type="password" name="password" id="signup-password" placeholder="Enter your password"
+                        required>
+                </div>
+                <button type="submit">Sign Up</button>
+                <br>
+                <hr>
+
+            </form>
+            {% if error %}
+            <p style="color:red; font-size:14px;">{{ error }}</p>
+            {% endif %}
+            <div class="toggle-btn">
+                <a href="javascript:void(0);" onclick="toggleForm()">Already have an account? Log In</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f2f2f2;
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        width: 100%;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #ff9900;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #ff6600;
+    }
+
+    .toggle-btn a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .toggle-btn a:hover {
+        text-decoration: underline;
+    }
+
+    .signup-form {
+        display: none;
+    }
+
+    .signup-active .signup-form {
+        display: block;
+    }
+
+    .signup-active .login-form {
+        display: none;
+    }
+</style>
+<script>
+    // Function to toggle between login and signup forms
+    function toggleForm() {
+        var formContainer = document.getElementById('form-container');
+        formContainer.classList.toggle('signup-active');
+    }
+</script>
 {% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}SweetTalk - Your Cart{% endblock %}
+{% block content %}
+<h1 class="display-4">Your Cart</h1>
+{% if cart_items %}
+    <ul class="list-group">
+        {% set grand_total = 0 %}
+        {% for order_id, order in cart_items.items() %}
+            {% set item_total = order.total_price %}
+            {% set grand_total = grand_total + item_total %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-2">
+                        <img src="{{ url_for('static', filename=order.image) }}" alt="{{ order.image }}" class="img-fluid">
+                    </div>
+                    <div class="col-md-10">
+                        <p><strong>Size:</strong> {{ order.size }}</p>
+                        <p><strong>Sweetness:</strong> {{ order.sweetness }}</p>
+                        <p><strong>Temperature:</strong> {{ order.temperature }}</p>
+                        <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+                        <p><strong>Total Price:</strong> ${{ item_total }}</p>
+                        <form method="POST" action="{{ url_for('remove_from_cart', order_id=order_id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm mt-2">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    <h3 class="mt-3">Grand Total: ${{ grand_total }}</h3>
+    <form method="POST" action="{{ url_for('clear_cart') }}">
+        <button type="submit" class="btn btn-warning mt-3">Clear Cart</button>
+    </form>
+    <a href="{{ url_for('payment') }}" class="btn btn-success mt-3">Proceed to Payment</a>
+{% else %}
+    <p>Your cart is empty.</p>
+    <a href="{{ url_for('orders') }}" class="btn btn-primary">Go back to Orders</a>
+{% endif %}
+{% endblock %}
