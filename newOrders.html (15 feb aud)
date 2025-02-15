@@ -12,7 +12,7 @@
          alt="Selected Bubble Tea" class="img-fluid rounded">
 </div>
 
-<form method="POST" action="{{ url_for('add_to_cart') }}"> 
+<form method="POST" action="{{ url_for('add_to_cart', image=request.args.get('image')) }}"> 
     <div class="form-group">
         {{ render_field(form.size, class="form-control") }}
     </div>
@@ -31,4 +31,6 @@
 </form>
 
 <br><br>
+<a href="{{ url_for('orders') }}" class="btn btn-secondary">Back to Menu</a>
+
 {% endblock %}
